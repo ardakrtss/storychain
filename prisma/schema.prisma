@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  nickname  String   @unique
+  pinHash   String
+  createdAt DateTime @default(now())
+  stories   Story[]
+}
+
+model Story {
+  id         String   @id @default(uuid())
+  userId     String
+  theme      Theme
+  content    String
+  moderated  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Theme {
+  FANTASTIK
+  GIZEM
+  BILIM_KURGU
+  MACERA
+  SIFIR_ATIK
+  IKLIM_DEGISIKLIGI
+}
