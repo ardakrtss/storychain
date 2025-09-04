@@ -1,79 +1,64 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useSession, signOut } from "next-auth/react"
-import { Button } from "@/components/ui/button"
-import { BookOpen, User, LogOut } from "lucide-react"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
+
+const links = [
+  { href: "/", label: "Ana Sayfa" },
+  { href: "/nasil-calisir", label: "Nasıl Çalışır" },
+  { href: "/hakkimizda", label: "Hakkımızda" },
+  { href: "/iletisim", label: "İletişim" },
+];
 
 export function Navbar() {
-  const { data: session } = useSession()
+  const pathname = usePathname();
 
   return (
-    <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center space-x-2">
-            <BookOpen className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-gray-900">StoryChain</span>
+    <header className="sticky top-0 z-50 backdrop-blur bg-white/70 shadow-[0_1px_0_0_rgba(0,0,0,0.04)]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <span className="inline-flex h-7 w-7 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 shadow-sm" />
+          <span className="text-lg font-semibold">
+            <span className="text-pink-600">Story</span>Chain
+          </span>
+        </Link>
+
+        {/* Middle Nav */}
+        <nav className="hidden md:flex items-center gap-6">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={clsx(
+                "text-sm transition-colors",
+                pathname === l.href
+                  ? "text-gray-900 font-medium"
+                  : "text-gray-600 hover:text-gray-900"
+              )}
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Right actions */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/giris"
+            className="px-3.5 h-9 rounded-md text-sm border border-gray-200 hover:bg-gray-50 text-gray-700"
+          >
+            Giriş Yap
           </Link>
-
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/nasil-calisir" className="text-gray-700 hover:text-primary transition-colors">
-              Nasıl Çalışır
-            </Link>
-            <Link href="/hikayeler" className="text-gray-700 hover:text-primary transition-colors">
-              Hikayeler
-            </Link>
-            <Link href="/liderlik" className="text-gray-700 hover:text-primary transition-colors">
-              Liderlik
-            </Link>
-            <Link href="/hakkimizda" className="text-gray-700 hover:text-primary transition-colors">
-              Hakkımızda
-            </Link>
-            <Link href="/iletisim" className="text-gray-700 hover:text-primary transition-colors">
-              İletişim
-            </Link>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            {session ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">
-                  Merhaba, <span className="font-semibold">{session.user.nickname}</span>!
-                </span>
-                <Link href="/hikaye-yaz">
-                  <Button size="sm" className="rounded-2xl">
-                    Hikaye Yaz
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => signOut()}
-                  className="rounded-2xl"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Çıkış
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link href="/giris">
-                  <Button variant="outline" size="sm" className="rounded-2xl">
-                    <User className="h-4 w-4 mr-2" />
-                    Giriş
-                  </Button>
-                </Link>
-                <Link href="/kayit">
-                  <Button size="sm" className="rounded-2xl">
-                    Kayıt Ol
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
+          <Link
+            href="/kayit"
+            className="px-3.5 h-9 rounded-md text-sm text-white bg-gradient-to-r from-fuchsia-600 to-violet-600 shadow hover:opacity-95"
+          >
+            Kaydol
+          </Link>
         </div>
       </div>
-    </nav>
-  )
+    </header>
+  );
 }

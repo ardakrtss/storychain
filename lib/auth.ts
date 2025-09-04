@@ -1,12 +1,10 @@
 import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import { db } from "./db"
 import Credentials from "next-auth/providers/credentials"
-import { compare } from "argon2"
+import { verify } from "argon2"
 import { z } from "zod"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(db),
   providers: [
     Credentials({
       name: "credentials",
@@ -33,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null
         }
 
-        const isPasswordValid = await compare(pin, user.pinHash)
+        const isPasswordValid = await verify(user.pinHash, pin)
 
         if (!isPasswordValid) {
           return null
@@ -52,11 +50,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id
         token.nickname = user.nickname
       }
       return token
     },
     async session({ session, token }) {
+      if (token.id) {
+        session.user.id = token.id as string
+      }
       if (token.nickname) {
         session.user.nickname = token.nickname as string
       }
