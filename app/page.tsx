@@ -33,48 +33,6 @@ function ThemeCard({
 export default function HomePage() {
   return (
     <main>
-      {/* NAVBAR */}
-      <header className="sticky top-0 z-50 backdrop-blur bg-white/70 shadow-[0_1px_0_0_rgba(0,0,0,0.04)]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="inline-flex h-7 w-7 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500" />
-            <span className="text-lg font-semibold">
-              <span className="text-pink-600">Story</span>Chain
-            </span>
-          </Link>
-
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm text-gray-900 font-medium">
-              Ana Sayfa
-            </Link>
-            <Link href="/nasil-calisir" className="text-sm text-gray-600 hover:text-gray-900">
-              Nasıl Çalışır
-            </Link>
-            <Link href="/hakkimizda" className="text-sm text-gray-600 hover:text-gray-900">
-              Hakkımızda
-            </Link>
-            <Link href="/iletisim" className="text-sm text-gray-600 hover:text-gray-900">
-              İletişim
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href="/giris"
-              className="px-3.5 h-9 rounded-md text-sm border border-gray-200 hover:bg-gray-50 text-gray-700"
-            >
-              Giriş Yap
-            </Link>
-            <Link
-              href="/kayit"
-              className="px-3.5 h-9 rounded-md text-sm text-white bg-gradient-to-r from-fuchsia-600 to-violet-600 shadow hover:opacity-95"
-            >
-              Kaydol
-            </Link>
-          </div>
-        </div>
-      </header>
-
       {/* HERO */}
       <section className="relative">
         <div className="absolute inset-0">

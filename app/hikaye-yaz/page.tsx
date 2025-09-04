@@ -1,5 +1,9 @@
 "use client"
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
@@ -12,6 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast"
 import { ProtectedRoute } from "@/components/ProtectedRoute"
 import { getThemeName } from "@/lib/utils"
+import { safeJson } from "@/lib/safeFetch"
 import { BookOpen, PenTool, Sparkles, Ghost, Rocket, Mountain, Leaf, Cloud, ArrowLeft } from "lucide-react"
 
 const themes = [
@@ -32,7 +37,8 @@ export default function WriteStoryPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const { data: session } = useSession()
+  const sessionData = useSession()
+  const { data: session } = sessionData || { data: null }
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -63,7 +69,7 @@ export default function WriteStoryPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/stories", {
+      const data = await safeJson<{ error?: string }>("/api/stories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,9 +80,7 @@ export default function WriteStoryPage() {
         }),
       })
 
-      const data = await response.json()
-
-      if (response.ok) {
+      if (data) {
         toast({
           title: "Harika!",
           description: "Hikayen başarıyla paylaşıldı!",
@@ -85,7 +89,7 @@ export default function WriteStoryPage() {
       } else {
         toast({
           title: "Hata!",
-          description: data.error || "Hikaye paylaşılırken bir hata oluştu.",
+          description: "Hikaye paylaşılırken bir hata oluştu.",
           variant: "destructive",
         })
       }

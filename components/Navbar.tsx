@@ -19,7 +19,7 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="inline-flex h-7 w-7 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500 shadow-sm" />
+          <span className="inline-flex h-7 w-7 rounded-lg bg-gradient-to-br from-pink-500 to-purple-500" />
           <span className="text-lg font-semibold">
             <span className="text-pink-600">Story</span>Chain
           </span>
